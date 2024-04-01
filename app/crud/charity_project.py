@@ -26,18 +26,18 @@ class CRUDCharityProject(CRUDBase):
             select(CharityProject)
             .where(CharityProject.fully_invested == True)  # noqa
             .order_by(
-                extract("year", CharityProject.close_date)
-                - extract("year", CharityProject.create_date),
-                extract("month", CharityProject.close_date)
-                - extract("month", CharityProject.create_date),
-                extract("day", CharityProject.close_date)
-                - extract("day", CharityProject.create_date),
-                extract("hour", CharityProject.close_date)
-                - extract("hour", CharityProject.create_date),
-                extract("minute", CharityProject.close_date)
-                - extract("minute", CharityProject.create_date),
-                extract("second", CharityProject.close_date)
-                - extract("second", CharityProject.create_date),
+                extract("year", CharityProject.close_date) -
+                extract("year", CharityProject.create_date),
+                extract("month", CharityProject.close_date) -
+                extract("month", CharityProject.create_date),
+                extract("day", CharityProject.close_date) -
+                extract("day", CharityProject.create_date),
+                extract("hour", CharityProject.close_date) -
+                extract("hour", CharityProject.create_date),
+                extract("minute", CharityProject.close_date) -
+                extract("minute", CharityProject.create_date),
+                extract("second", CharityProject.close_date) -
+                extract("second", CharityProject.create_date),
             )
         )
         projects = projects.scalars().all()
