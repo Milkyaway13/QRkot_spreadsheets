@@ -11,6 +11,7 @@
 * FastAPI 0.78
 * SQLAlchemy 1.4
 * Alembic 1.7
+* Aiogoogle 4.2
 
 ## Документация OpenAPI доступна по ссылке: http://127.0.0.1:8000/docs
 
