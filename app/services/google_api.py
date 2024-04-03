@@ -2,31 +2,11 @@ from datetime import datetime
 
 from aiogoogle import Aiogoogle
 
-from app.core.config import settings
-from app.core.constants import COLUMN_COUNT, FORMAT, ROW_COUNT
+from app.core.constants import (
+    PERMISSIONS_BODY, SPREADSHEETS_BODY,
+    TABLE_VALUES, UPDATE_BODY
+)
 from app.models.charity_project import CharityProject
-
-now_date_time = datetime.now().strftime(FORMAT)
-SPREADSHEETS_BODY = {
-    "properties": {"title": "", "locale": "ru_RU"},
-    "sheets": [
-        {
-            "properties": {
-                "sheetType": "GRID",
-                "sheetId": 0,
-                "title": "Лист1",
-                "gridProperties": {"rowCount": ROW_COUNT, "columnCount": COLUMN_COUNT},
-            }
-        }
-    ],
-}
-PERMISSIONS_BODY = {"type": "user", "role": "writer", "emailAddress": settings.email}
-TABLE_VALUES = [
-    ["Отчёт от", now_date_time],
-    ["Топ проектов по скорости закрытия"],
-    ["Название проекта", "Время сбора", "Описание"],
-]
-UPDATE_BODY = {"majorDimension": "ROWS", "values": TABLE_VALUES}
 
 
 async def spreadsheets_create(
@@ -63,13 +43,11 @@ async def spreadsheets_update_value(
 
     service = await wrapper_services.discover("sheets", "v4")
 
-    for project in projects:
-        new_row = [
-            str(project.name),
-            str(project.close_date - project.create_date),
-            str(project.description),
-        ]
-        TABLE_VALUES.append(new_row)
+    TABLE_VALUES.extend([
+        str(project.name),
+        str(project.close_date - project.create_date),
+        str(project.description),
+    ] for project in projects)
 
     await wrapper_services.as_service_account(
         service.spreadsheets.values.update(

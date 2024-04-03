@@ -18,7 +18,7 @@ from app.services.google_api import (
 router = APIRouter()
 
 
-@router.get("/", response_model=str, dependencies=[Depends(current_superuser)])
+@router.get("/", response_model=str, dependencies=(Depends(current_superuser),))
 async def get_report(
     session: AsyncSession = Depends(get_async_session),
     wrapper_services: Aiogoogle = Depends(get_service),
@@ -30,8 +30,7 @@ async def get_report(
     await spreadsheets_update_value(
         spreadsheet_id, projects, current_time, wrapper_services
     )
-    result = (
+    return (
         f"Ссылка на таблицу: "
         f"https://docs.google.com/spreadsheets/d/{spreadsheet_id}/edit#gid=0"
     )
-    return result

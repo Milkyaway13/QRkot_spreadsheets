@@ -14,7 +14,7 @@ router = APIRouter()
 @router.get(
     "/",
     response_model=list[DonationDBSuperUser],
-    dependencies=[Depends(current_superuser)],
+    dependencies=(Depends(current_superuser),),
 )
 async def get_all_donations(session: AsyncSession = Depends(get_async_session)):
     return await donation_crud.get_multi(session)
